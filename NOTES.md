@@ -1,6 +1,6 @@
 ## Plans
 
-- [] Setup project (Gradle, SpringBoot)
+- [x] Setup project (Gradle, SpringBoot)
 - [] Add swagger for API testing and usage
 - [] Implement logic to read data from the csv files
 - [] Implement generic search functionality
