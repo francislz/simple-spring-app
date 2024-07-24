@@ -56,10 +56,4 @@ public class SearchController {
 		return searchService.search(name, customerRating, distance, price, cuisine);
 	}
 
-	@GetMapping("/all")
-	@Operation(summary = "Get all restaurants", description = "Retrieves restaurants")
-    public List<Restaurant> getAllRestaurants() {
-        return searchService.getAllRestaurants();
-    }
-
 }

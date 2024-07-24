@@ -4,8 +4,6 @@ import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import jakarta.validation.OverridesAttribute;
-
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Restaurant implements Serializable {
     private String name;
