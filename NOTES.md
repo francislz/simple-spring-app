@@ -1,7 +1,7 @@
 ## Plans
 
 - [x] Setup project (Gradle, SpringBoot)
-- [] Add swagger for API testing and usage
+- [x] Add swagger for API testing and usage
 - [] Implement logic to read data from the csv files
 - [] Implement generic search functionality
     - Option 1: Simple search on a list using string matching (Less efficient, but we don´t have much data so not an issue)
