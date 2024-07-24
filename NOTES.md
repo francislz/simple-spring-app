@@ -2,14 +2,20 @@
 
 - [x] Setup project (Gradle, SpringBoot)
 - [x] Add swagger for API testing and usage
-- [] Implement logic to read data from the csv files
-- [] Implement generic search functionality
+- [x] Implement logic to read data from the csv files
+- [x] Handle query parameters validation
+- [x] Implement generic search functionality
+- [] Implement the scenario to handle the first assumption
+- [] Implement best match using the search algorithm and the parameters
     - Option 1: Simple search on a list using string matching (Less efficient, but we don´t have much data so not an issue)
     - Option 2: Create a Data Structure such as a suffix tree to optimize the search to support scalability (better search but can be memory intensive if the data scales a lot)
     - Option 3: Load everything into a SQLite, index the columns used in the search and let the DB handle the search
     - Option 4: Group the data using a Hash and do a linear search on the group, this allows us to avoid search the entire dataset in this particular case.
-- Implement best match using the search algorithm and the parameters
 - Implement sort logic
+
+## Assumptions
+
+1. Calling the search endpoint without any of the query parameters should return the top five restaurants following the sorting criteria
 
 ### Find the best-matched restaurants (Requirements)
 You have data about local restaurants located near your company, which you can find in the **restaurants.csv** file. You would like to develop a basic search function that allows your colleagues to search those restaurants to help them find where they would like to have lunch. The search is based on five criteria: **Restaurant Name, Customer Rating(1 star ~ 5 stars), Distance(1 mile ~ 10 miles), Price(how much one person will spend on average, $10 ~ $50), Cuisine(Chinese, American, Thai, etc.).** The requirements are listed below.
