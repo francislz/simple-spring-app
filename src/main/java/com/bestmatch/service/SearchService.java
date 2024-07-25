@@ -67,7 +67,8 @@ public class SearchService {
             results.retainAll(retainedRestaurants);
         }
         if (customerRating != null) {
-            results.retainAll(ratingMap.tailMap(customerRating).values().stream().flatMap(Collection::stream).collect(Collectors.toSet()));
+            results.retainAll(restaurants.stream().filter(restaurant -> restaurant.getCustomerRating() >= customerRating).collect(Collectors.toSet()));
+            // results.retainAll(ratingMap.tailMap(customerRating).values().stream().flatMap(Collection::stream).collect(Collectors.toSet()));
         }
         if (distance != null) {
             results.retainAll(distanceMap.headMap(distance, true).values().stream().flatMap(Collection::stream).collect(Collectors.toSet()));
