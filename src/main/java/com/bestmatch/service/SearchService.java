@@ -17,9 +17,7 @@ import java.util.stream.Collectors;
 @Service
 public class SearchService {
     private final TreeMap<Double, List<Restaurant>> distanceMap = new TreeMap<>();
-    private final TreeMap<Integer, List<Restaurant>> ratingMap = new TreeMap<>(Comparator.reverseOrder());
     private final TreeMap<Double, List<Restaurant>> priceMap = new TreeMap<>();
-    private final Map<String, List<Restaurant>> nameMap = new HashMap<>();
     private final Map<Integer, List<Restaurant>> cusineToRestaurantsMap = new HashMap<>();
 
     private final RestaurantRepository restaurantRepository;
@@ -35,9 +33,7 @@ public class SearchService {
     public void init() {
         for (Restaurant restaurant : restaurantRepository.getRestaurants()) {
             distanceMap.computeIfAbsent(restaurant.getDistance(), k -> new ArrayList<>()).add(restaurant);
-            ratingMap.computeIfAbsent(restaurant.getCustomerRating(), k -> new ArrayList<>()).add(restaurant);
             priceMap.computeIfAbsent(restaurant.getPrice(), k -> new ArrayList<>()).add(restaurant);
-            nameMap.computeIfAbsent(restaurant.getName().toLowerCase(), k -> new ArrayList<>()).add(restaurant);
             cusineToRestaurantsMap.computeIfAbsent(restaurant.getCuisine(), k -> new ArrayList<>()).add(restaurant);
         }
     }
@@ -56,7 +52,6 @@ public class SearchService {
 
         if (name != null) {
             results.retainAll(restaurants.stream().filter(restaurant -> restaurant.getName().toLowerCase().contains(name.toLowerCase())).collect(Collectors.toSet()));
-            // results.retainAll(nameMap.getOrDefault(name.toLowerCase(), Collections.emptyList()));
         }
         if (cuisine != null) {
             List<Cuisine> cuisines = cuisineRepository.filterCuisinesByName(cuisine);
@@ -68,7 +63,6 @@ public class SearchService {
         }
         if (customerRating != null) {
             results.retainAll(restaurants.stream().filter(restaurant -> restaurant.getCustomerRating() >= customerRating).collect(Collectors.toSet()));
-            // results.retainAll(ratingMap.tailMap(customerRating).values().stream().flatMap(Collection::stream).collect(Collectors.toSet()));
         }
         if (distance != null) {
             results.retainAll(distanceMap.headMap(distance, true).values().stream().flatMap(Collection::stream).collect(Collectors.toSet()));
