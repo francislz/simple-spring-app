@@ -38,14 +38,6 @@ public class SearchService {
         }
     }
 
-    public List<Restaurant> getAllRestaurants() {
-        return restaurantRepository.getRestaurants();
-    }
-
-    public List<Cuisine> getAllCuisines() {
-        return cuisineRepository.getCuisines();
-    }
-
     public List<Restaurant> search(String name, Integer customerRating, Double distance, Double price, String cuisine) {
         List<Restaurant> restaurants = restaurantRepository.getRestaurants();
         Set<Restaurant> results = new HashSet<>(restaurantRepository.getRestaurants());
