@@ -1,22 +1,25 @@
-# Fullstack Technical Assessment
-A take home assessment designed for Full-stack or Backend developers
-## Best matched restaurants
-### Introduction
-This assessment is designed to test your thinking process and coding skills when facing a real industry problem. We will assess you based on the requirements listed in the problem description below. Please note that we're looking for code that is clean, readable, testable, robust, performant, and maintainable. If you continue to our interview panel stage, we will ask you questions about your implementation.
+## Plans
 
-Since this assessment includes a searching function, we kindly ask you to avoid out of box search engines such as ElasticSearch. Instead, you should write the searching logic by yourself. Also, please choose one of the below languages
-- Java
-- Kotlin
-- JavaScript
-- Ruby
+- [x] Setup project (Gradle, SpringBoot)
+- [x] Add swagger for API testing and usage
+- [x] Implement logic to read data from the csv files
+- [x] Handle query parameters validation
+- [x] Implement generic search functionality
+- [x] Implement the scenario to handle the first assumption
+- [x] Implement best match using the search algorithm and the parameters
+    - Option 1: Simple search on a list using string matching (Less efficient, but we don´t have much data so not an issue)
+    - Option 2: Create a Data Structure such as a suffix tree to optimize the search to support scalability (better search but can be memory intensive if the data scales a lot)
+    - Option 3: Load everything into a SQLite, index the columns used in the search and let the DB handle the search
+    - Option 4: Group the data using a Hash and do a linear search on the group, this allows us to avoid search the entire dataset in this particular case.
+- [x] Implement sort logic
 
-and any frameworks you are familiar with to complete the assessment. We are focusing on your idea and your code quality, hence will not make judgments on which technologies you choose. All the data you will need in this assessment will be provided to you as **.csv** files.
+NOTE: For the search algorithm I used a combination of a HashMap and a TreeMap. To match the cuisines I create a HashMap that mapped the cuisine Id to a list of restaurants. This way by getting the cuisine Id I was able to get all the restaurants that provide that cuisine in O(1). To handle the range searches (distance and price) I used a tree map that is basically a balanced binary tree.
 
-When you are done, please return the task by email. We expect to receive your response within 5 days after you receive this assessment.
+## Assumptions
 
-*Note: We expect you to do this assessment by yourself without other people's help. We ask you to keep this assessment private and not to share it with others. All data provided are fake and used only for this assessment.*
+1. Calling the search endpoint without any of the query parameters should return the top five restaurants following the sorting criteria
 
-### Find the best-matched restaurants
+### Find the best-matched restaurants (Requirements)
 You have data about local restaurants located near your company, which you can find in the **restaurants.csv** file. You would like to develop a basic search function that allows your colleagues to search those restaurants to help them find where they would like to have lunch. The search is based on five criteria: **Restaurant Name, Customer Rating(1 star ~ 5 stars), Distance(1 mile ~ 10 miles), Price(how much one person will spend on average, $10 ~ $50), Cuisine(Chinese, American, Thai, etc.).** The requirements are listed below.
 
 1. The function should allow users to provide up to five parameters based on the criteria listed above. *You can assume each parameter can contain only one value.*
@@ -36,10 +39,3 @@ You have data about local restaurants located near your company, which you can f
      - After the above process, if two matches are still equal, then you can randomly decide the order.
      - Example: if the input is Customer Rating = 3 and Price = 15. Mcdonald’s is 4 stars with an average spend = $10, and it is 1 mile away. And KFC is 3 stars with an average spend = $8, and it is 1 mile away. Then we should consider Mcdonald’s as a better match than KFC. (They both matches the search criteria -> we compare distance -> we get a tie -> we then compare customer rating -> Mcdonald’s wins)
 5. The final submitted work should include a README file. No UI is required in this assessment, but you may implement one if you would like. **The steps to run and test your program should be clearly introduced in the README file.** If you have made any additional **Assumptions** besides what we have listed above while working on this assessment, please document them so that we can better understand your solution.
-
-### Evaluation
-Your work will be evaluated with the following criteria:
-
-- Functionality: the app fulfills the requirements, with no major bugs.
-- Maintainability: the code is clean, extensible, and easy to work with.
-- Usability: the user will be able to easily use your program to get the desired results, with minimal or no instruction.
