@@ -5,13 +5,15 @@
 - [x] Implement logic to read data from the csv files
 - [x] Handle query parameters validation
 - [x] Implement generic search functionality
-- [] Implement the scenario to handle the first assumption
-- [] Implement best match using the search algorithm and the parameters
+- [x] Implement the scenario to handle the first assumption
+- [x] Implement best match using the search algorithm and the parameters
     - Option 1: Simple search on a list using string matching (Less efficient, but we don´t have much data so not an issue)
     - Option 2: Create a Data Structure such as a suffix tree to optimize the search to support scalability (better search but can be memory intensive if the data scales a lot)
     - Option 3: Load everything into a SQLite, index the columns used in the search and let the DB handle the search
     - Option 4: Group the data using a Hash and do a linear search on the group, this allows us to avoid search the entire dataset in this particular case.
-- Implement sort logic
+- [x] Implement sort logic
+
+NOTE: For the search algorithm I used a combination of a HashMap and a TreeMap. To match the cuisines I create a HashMap that mapped the cuisine Id to a list of restaurants. This way by getting the cuisine Id I was able to get all the restaurants that provide that cuisine in O(1). To handle the range searches (distance and price) I used a tree map that is basically a balanced binary tree.
 
 ## Assumptions
 
