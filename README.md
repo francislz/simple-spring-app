@@ -43,3 +43,56 @@ Your work will be evaluated with the following criteria:
 - Functionality: the app fulfills the requirements, with no major bugs.
 - Maintainability: the code is clean, extensible, and easy to work with.
 - Usability: the user will be able to easily use your program to get the desired results, with minimal or no instruction.
+
+## Plans
+
+- [x] Setup project (Gradle, SpringBoot)
+- [x] Add swagger for API testing and usage
+- [x] Implement logic to read data from the csv files
+- [x] Handle query parameters validation
+- [x] Implement generic search functionality
+- [x] Implement the scenario to handle the first assumption
+- [x] Implement best match using the search algorithm and the parameters
+    - Option 1: Simple search on a list using string matching (Less efficient, but we don´t have much data so not an issue)
+    - Option 2: Create a Data Structure such as a suffix tree to optimize the search to support scalability (better search but can be memory intensive if the data scales a lot)
+    - Option 3: Load everything into a SQLite, index the columns used in the search and let the DB handle the search
+    - Option 4: Group the data using a Hash and do a linear search on the group, this allows us to avoid search the entire dataset in this particular case.
+- [x] Implement sort logic
+
+NOTE: For the search algorithm I used a combination of a HashMap and a TreeMap. To match the cuisines I create a HashMap that mapped the cuisine Id to a list of restaurants. This way by getting the cuisine Id I was able to get all the restaurants that provide that cuisine in O(1). To handle the range searches (distance and price) I used a tree map that is basically a balanced binary tree.
+
+## Assumptions
+
+1. Calling the search endpoint without any of the query parameters should return the top five restaurants following the sorting criteria.
+
+2. All the inputs validation on the SearchController were created based on the ranges defined on the requirements: **Restaurant Name, Customer Rating(1 star ~ 5 stars), Distance(1 mile ~ 10 miles), Price(how much one person will spend on average, $10 ~ $50), Cuisine(Chinese, American, Thai, etc.).**
+
+## Other notes
+- I added a CI pipeline using github actions to run the unit tests
+- I added a docker file to facilitate running this app in all the platforms.
+- In case this application scales I move the data to a DB and use elastic search to optimize the search.
+- I added some unit tests for the controller and the service
+- I used reflection to make a generic class able to read both of the CSVs
+
+## Runing this application
+
+For both options after the application has started just access [this link](http://localhost:8080/swagger-ui/index.html#/Search%20Controller/search) and you will be able to call the search API.
+
+### Option 1: Docker container
+
+Running this application using docker is pretty simple and straight forward, to do it simple run on the terminal:
+
+```sh
+docker build -t spring-app .
+docker run -p 8080:8080 spring-app
+```
+
+### Option 2: Using gradle
+
+- Ensure you have gradle 8.x installed: https://gradle.org/install/
+- Run the commands on the terminal:
+```sh
+gradle clean
+gradle bootJar
+java -jar build/libs/bestmatch-0.0.1-SNAPSHOT.jar
+```

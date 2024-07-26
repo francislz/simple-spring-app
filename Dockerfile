@@ -3,7 +3,7 @@ FROM eclipse-temurin:21-jdk AS build
 WORKDIR /app
 
 # Install Gradle manually
-RUN apt-get update && apt-get install -y wget unzip
+RUN apt-get update && apt-get install -y wget unzip && rm -rf /var/lib/apt/lists/*
 RUN wget https://services.gradle.org/distributions/gradle-8.1-bin.zip -P /tmp
 RUN unzip -d /opt/gradle /tmp/gradle-8.1-bin.zip
 ENV PATH=/opt/gradle/gradle-8.1/bin:$PATH
