@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("search")
-@Tag(name = "Search Controller", description = "Search data given the query parameters")
+@Tag(name = "Search Restaurants", description = "Handles search operations")
 public class SearchController {
 	private final SearchService searchService;
 
@@ -26,7 +26,7 @@ public class SearchController {
 	}
 
     @GetMapping("/")
-	@Operation(summary = "Search the best restaurants", description = "Searches")
+	@Operation(summary = "Search the best restaurants", description = "Provided with restaurant name, distance, price, cuisine, and customer rating, return a list of restaurants that match the search criteria")
 	public List<Restaurant> search(
 		@RequestParam(required = false) String name,
 		@RequestParam(required = false) Integer customerRating,
@@ -34,23 +34,16 @@ public class SearchController {
 		@RequestParam(required = false) Double price,
 		@RequestParam(required = false) String cuisine
 	) {
-		// Validate query parameters based on:
-		// Restaurant Name, Customer Rating(1 star ~ 5 stars), 
-		// Distance(1 mile ~ 10 miles), 
-		// Price(how much one person will spend on average, $10 ~ $50), 
-		// Cuisine(Chinese, American, Thai, etc.)
-
 		if (customerRating != null && (customerRating < 1 || customerRating > 5)) {
-			// Return 400 Bad Request if customerRating is not between 1 and 5
-			throw new BadRequestException("Invalid customer rating");
+			throw new BadRequestException("Invalid customer rating, please provide a value between 1 and 5");
 		}
 
 		if (distance != null && (distance < 1 || distance > 10)) {
-			throw new BadRequestException("Invalid distance");
+			throw new BadRequestException("Invalid distance, please provide a value between 1 and 10");
 		}
 
 		if (price != null && (price < 10 || price > 50)) {
-			throw new BadRequestException("Invalid price");
+			throw new BadRequestException("Invalid price, please provide a value between 10 and 50");
 		}
 
 		return searchService.search(name, customerRating, distance, price, cuisine);

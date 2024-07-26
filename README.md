@@ -76,7 +76,6 @@ NOTE: For the search algorithm I used a combination of a HashMap and a TreeMap. 
 
 ## Runing this application
 
-For both options after the application has started just access [this link](http://localhost:8080/swagger-ui/index.html#/Search%20Controller/search) and you will be able to call the search API.
 
 ### Option 1: Docker container
 
@@ -96,3 +95,14 @@ gradle clean
 gradle bootJar
 java -jar build/libs/bestmatch-0.0.1-SNAPSHOT.jar
 ```
+
+### Testing the search
+
+- For both options after the application has started just access
+  * http://localhost:8080/swagger-ui/index.html#/Search%20Restaurants/search
+
+- Click on the "Try it out" button
+- Provide the search information you would like
+  * If you would like the top 5 best restaurants just let the fields empty
+- Click on the execute button
+- Top 5 restaurants should be on the response body if available
