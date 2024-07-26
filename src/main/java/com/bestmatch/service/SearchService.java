@@ -38,30 +38,51 @@ public class SearchService {
         }
     }
 
-    public List<Restaurant> search(String name, Integer customerRating, Double distance, Double price, String cuisine) {
-        List<Restaurant> restaurants = restaurantRepository.getRestaurants();
-        Set<Restaurant> results = new HashSet<>(restaurantRepository.getRestaurants());
-
-        if (name != null) {
-            results.retainAll(restaurants.stream().filter(restaurant -> restaurant.getName().toLowerCase().contains(name.toLowerCase())).collect(Collectors.toSet()));
-        }
-        if (cuisine != null) {
+    private List<Restaurant> getSearchedCuisineRestaurantsOrAll(String cuisine) {
+        if (cuisine == null) {
+            return restaurantRepository.getRestaurants();
+        } else {
             List<Cuisine> cuisines = cuisineRepository.filterCuisinesByName(cuisine);
             List<Restaurant> retainedRestaurants = new ArrayList<>();
             for (Cuisine c : cuisines) {
                 retainedRestaurants.addAll(cusineToRestaurantsMap.getOrDefault(c.getId(), Collections.emptyList()));
             }
-            results.retainAll(retainedRestaurants);
+            return retainedRestaurants;
         }
+    }
+
+    private void applyRestaurantNameFilter(Set<Restaurant> restaurants, String name) {
+        if (name != null) {
+            restaurants.retainAll(restaurants.stream().filter(restaurant -> restaurant.getName().toLowerCase().contains(name.toLowerCase())).collect(Collectors.toSet()));
+        }
+    }
+
+    private void applyCustomerRatingFilter(Set<Restaurant> restaurants, Integer customerRating) {
         if (customerRating != null) {
-            results.retainAll(restaurants.stream().filter(restaurant -> restaurant.getCustomerRating() >= customerRating).collect(Collectors.toSet()));
+            restaurants.retainAll(restaurants.stream().filter(restaurant -> restaurant.getCustomerRating() >= customerRating).collect(Collectors.toSet()));
         }
+    }
+
+    private void applyDistanceFilter(Set<Restaurant> restaurants, Double distance) {
         if (distance != null) {
-            results.retainAll(distanceMap.headMap(distance, true).values().stream().flatMap(Collection::stream).collect(Collectors.toSet()));
+            restaurants.retainAll(restaurants.stream().filter(restaurant -> restaurant.getDistance() <= distance).collect(Collectors.toSet()));
         }
+    }
+
+    private void applyPriceFilter(Set<Restaurant> restaurants, Double price) {
         if (price != null) {
-            results.retainAll(priceMap.headMap(price, true).values().stream().flatMap(Collection::stream).collect(Collectors.toSet()));
+            restaurants.retainAll(restaurants.stream().filter(restaurant -> restaurant.getPrice() <= price).collect(Collectors.toSet()));
         }
+    }
+
+    public List<Restaurant> search(String name, Integer customerRating, Double distance, Double price, String cuisine) {
+        List<Restaurant> restaurants = getSearchedCuisineRestaurantsOrAll(cuisine);
+        Set<Restaurant> results = new HashSet<>(restaurants);
+
+        applyRestaurantNameFilter(results, name);
+        applyCustomerRatingFilter(results, customerRating);
+        applyDistanceFilter(results, distance);
+        applyPriceFilter(results, price);
 
         return results.stream()
                 .sorted(Comparator.comparingDouble(Restaurant::getDistance)

@@ -35,7 +35,11 @@ public class CuisineRepository {
     }
 
     public List<Cuisine> filterCuisinesByName(String name) {
-        return cuisines.stream().filter(cuisine -> cuisine.getName().toLowerCase().contains(name.toLowerCase())).collect(Collectors.toList());
+        List<Cuisine> filtered = cuisines.stream().filter(cuisine -> cuisine.getName().toLowerCase().contains(name.toLowerCase())).toList();
+        if (filtered.isEmpty()) {
+            return cuisines.stream().filter(cuisine -> cuisine.getName().toLowerCase().contains("other")).toList();
+        }
+        return filtered;
     }
 
     public Cuisine getCuisineById(int id) {

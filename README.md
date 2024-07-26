@@ -67,6 +67,8 @@ NOTE: For the search algorithm I used a combination of a HashMap and a TreeMap. 
 
 2. All the inputs validation on the SearchController were created based on the ranges defined on the requirements: **Restaurant Name, Customer Rating(1 star ~ 5 stars), Distance(1 mile ~ 10 miles), Price(how much one person will spend on average, $10 ~ $50), Cuisine(Chinese, American, Thai, etc.).**
 
+3. When searching by cuisine name and no match was found we should default to "Other"
+
 ## Other notes
 - I added a CI pipeline using github actions to run the unit tests
 - I added a docker file to facilitate running this app in all the platforms.

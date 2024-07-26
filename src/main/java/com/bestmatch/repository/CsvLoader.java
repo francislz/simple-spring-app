@@ -16,26 +16,38 @@ public class CsvLoader {
     public <T> List<T> loadCsv(String fileName, Class<T> type) {
         List<T> resultList = new ArrayList<>();
         Resource resource = new ClassPathResource(fileName);
+
         try (BufferedReader br = new BufferedReader(new InputStreamReader(resource.getInputStream()))) {
             String line;
-            br.readLine(); // Skip header
+            br.readLine();
             while ((line = br.readLine()) != null) {
                 String[] fields = line.split(",");
-                T instance = type.getDeclaredConstructor().newInstance();
-                Field[] declaredFields = type.getDeclaredFields();
-                for (int i = 0; i < fields.length; i++) {
-                    if (i < declaredFields.length) {
-                        Field field = declaredFields[i];
-                        field.setAccessible(true);
-                        setFieldValue(instance, field, fields[i]);
-                    }
-                }
+                T instance = createInstanceAndSetFields(type, fields);
                 resultList.add(instance);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         return resultList;
+    }
+
+    private <T> T createInstanceAndSetFields(Class<T> type, String[] fields) {
+        try {
+            T instance = type.getDeclaredConstructor().newInstance();
+            Field[] declaredFields = type.getDeclaredFields();
+            for (int i = 0; i < fields.length; i++) {
+                if (i < declaredFields.length) {
+                    Field field = declaredFields[i];
+                    field.setAccessible(true);
+                    setFieldValue(instance, field, fields[i]);
+                }
+            }
+            return instance;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private <T> void setFieldValue(T instance, Field field, String value) throws IllegalAccessException {
