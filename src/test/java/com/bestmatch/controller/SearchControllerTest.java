@@ -43,25 +43,25 @@ public class SearchControllerTest {
     @Test
     public void testCustomerRatingValidation() {
         BadRequestException exception = assertThrows(BadRequestException.class, () -> searchController.search(null, 0, null, null, null));
-        assertEquals("Invalid customer rating", exception.getMessage());
+        assertEquals("Invalid customer rating, please provide a value between 1 and 5", exception.getMessage());
         BadRequestException exception2 = assertThrows(BadRequestException.class, () -> searchController.search(null, 6, null, null, null));
-        assertEquals("Invalid customer rating", exception2.getMessage());
+        assertEquals("Invalid customer rating, please provide a value between 1 and 5", exception2.getMessage());
     }
 
     @Test
     public void testDistanceValidation() {
         BadRequestException exception = assertThrows(BadRequestException.class, () -> searchController.search(null, null, 0.0, null, null));
-        assertEquals("Invalid distance", exception.getMessage());
+        assertEquals("Invalid distance, please provide a value between 1 and 10", exception.getMessage());
         BadRequestException exception2 = assertThrows(BadRequestException.class, () -> searchController.search(null, null, 11.0, null, null));
-        assertEquals("Invalid distance", exception2.getMessage());
+        assertEquals("Invalid distance, please provide a value between 1 and 10", exception2.getMessage());
     }
 
     @Test
     public void testPriceValidation() {
         BadRequestException exception = assertThrows(BadRequestException.class, () -> searchController.search(null, null, null, 200.0, null));
-        assertEquals("Invalid price", exception.getMessage());
+        assertEquals("Invalid price, please provide a value between 10 and 50", exception.getMessage());
         BadRequestException exception2 = assertThrows(BadRequestException.class, () -> searchController.search(null, null, null, 9.0, null));
-        assertEquals("Invalid price", exception2.getMessage());
+        assertEquals("Invalid price, please provide a value between 10 and 50", exception2.getMessage());
     }
 
     @Test
