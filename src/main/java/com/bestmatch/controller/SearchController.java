@@ -1,5 +1,6 @@
 package com.bestmatch.controller;
 
+import com.bestmatch.dtos.RestaurantResponseDTO;
 import com.bestmatch.entity.*;
 import com.bestmatch.service.SearchService;
 import com.bestmatch.exception.BadRequestException;
@@ -27,7 +28,7 @@ public class SearchController {
 
     @GetMapping("/")
 	@Operation(summary = "Search the best restaurants", description = "Provided with restaurant name, distance, price, cuisine, and customer rating, return a list of restaurants that match the search criteria")
-	public List<Restaurant> search(
+	public List<RestaurantResponseDTO> search(
 		@RequestParam(required = false) String name,
 		@RequestParam(required = false) Integer customerRating,
 		@RequestParam(required = false) Double distance,

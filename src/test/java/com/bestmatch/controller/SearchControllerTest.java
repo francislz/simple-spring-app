@@ -7,6 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.bestmatch.dtos.RestaurantResponseDTO;
 import com.bestmatch.entity.Restaurant;
 import com.bestmatch.exception.BadRequestException;
 import com.bestmatch.service.SearchService;
@@ -27,13 +28,13 @@ public class SearchControllerTest {
     @InjectMocks
     private SearchController searchController;
 
-    private List<Restaurant> restaurants;
+    private List<RestaurantResponseDTO> restaurants;
 
     @BeforeEach
     public void setUp() {
-        Restaurant r1 = new Restaurant("Mcdonald's", 4, 2.0, 10.0, 1);
-        Restaurant r2 = new Restaurant("KFC", 3, 1.5, 15.0, 2);
-        Restaurant r3 = new Restaurant("Burger King", 5, 1.0, 20.0, 3);
+        RestaurantResponseDTO r1 = new RestaurantResponseDTO("Mcdonald's", 4, 2.0, 10.0, "American");
+        RestaurantResponseDTO r2 = new RestaurantResponseDTO("KFC", 3, 1.5, 15.0, "Chinese");
+        RestaurantResponseDTO r3 = new RestaurantResponseDTO("Burger King", 5, 1.0, 20.0, "Other");
         
         restaurants = Arrays.asList(r1, r2, r3);
 
@@ -69,7 +70,7 @@ public class SearchControllerTest {
         // Arrange
         when(searchService.search(null, null, null, null, null)).thenReturn(restaurants);
         // Act
-        List<Restaurant> result = searchController.search(null, null, null, null, null);
+        List<RestaurantResponseDTO> result = searchController.search(null, null, null, null, null);
         // Assert
         assertEquals(3, result.size());
         assertEquals("Mcdonald's", result.get(0).getName());

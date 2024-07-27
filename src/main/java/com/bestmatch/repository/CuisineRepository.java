@@ -12,8 +12,6 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 
-import java.util.stream.Collectors;
-
 @Repository
 public class CuisineRepository {
     private final List<Cuisine> cuisines = new ArrayList<>();

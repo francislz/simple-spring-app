@@ -7,6 +7,7 @@ import com.bestmatch.repository.RestaurantRepository;
 
 import jakarta.annotation.PostConstruct;
 
+import com.bestmatch.dtos.RestaurantResponseDTO;
 import com.bestmatch.entity.Cuisine;
 import com.bestmatch.entity.Restaurant;
 import com.bestmatch.repository.CuisineRepository;
@@ -75,7 +76,26 @@ public class SearchService {
         }
     }
 
-    public List<Restaurant> search(String name, Integer customerRating, Double distance, Double price, String cuisine) {
+    private List<RestaurantResponseDTO> getRestaurantResponseDTOs(List<Restaurant> restaurants) {
+        List<RestaurantResponseDTO> restaurantResponseDTOs = new ArrayList<>();
+        for (Restaurant restaurant : restaurants) {
+            Cuisine cuisine = cuisineRepository.getCuisineById(restaurant.getCuisine());
+            RestaurantResponseDTO dto = RestaurantResponseDTO.fromRestaurant(restaurant, cuisine);
+            restaurantResponseDTOs.add(dto);
+        }
+        return restaurantResponseDTOs;
+    }
+
+    private List<Restaurant> getTopFiveRestaurants(Set<Restaurant> restaurants) {
+        return restaurants.stream()
+                .sorted(Comparator.comparingDouble(Restaurant::getDistance)
+                        .thenComparing(Comparator.comparingInt(Restaurant::getCustomerRating).reversed())
+                        .thenComparingDouble(Restaurant::getPrice))
+                .limit(5)
+                .collect(Collectors.toList());
+    }
+
+    public List<RestaurantResponseDTO> search(String name, Integer customerRating, Double distance, Double price, String cuisine) {
         List<Restaurant> restaurants = getSearchedCuisineRestaurantsOrAll(cuisine);
         Set<Restaurant> results = new HashSet<>(restaurants);
 
@@ -84,11 +104,7 @@ public class SearchService {
         applyDistanceFilter(results, distance);
         applyPriceFilter(results, price);
 
-        return results.stream()
-                .sorted(Comparator.comparingDouble(Restaurant::getDistance)
-                        .thenComparing(Comparator.comparingInt(Restaurant::getCustomerRating).reversed())
-                        .thenComparingDouble(Restaurant::getPrice))
-                .limit(5)
-                .collect(Collectors.toList());
+        List<Restaurant> bestMatch = getTopFiveRestaurants(results);
+        return getRestaurantResponseDTOs(bestMatch);
     }
 }
